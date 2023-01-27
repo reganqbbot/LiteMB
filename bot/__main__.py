@@ -87,9 +87,8 @@ def restart(update, context):
         f.truncate(0)
         f.write(f"{restart_message.chat.id}\n{restart_message.message_id}\n")
     fs_utils.clean_all()
-    alive.kill()
     subprocess.run(["pkill", "-9", "-f", "gunicorn|aria2c|ffmpeg"])
-    subprocess.run(["python3", "update.py"])
+    alive.kill()
     os.execl(executable, executable, "-m", "bot")
 
 
