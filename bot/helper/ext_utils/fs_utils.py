@@ -12,7 +12,7 @@ import time
 from PIL import Image
 from hachoir.parser import createParser
 from hachoir.metadata import extractMetadata
-from bot import aria2, LOGGER, DOWNLOAD_DIR, TG_SPLIT_SIZE
+from bot import aria2, LOGGER, DOWNLOAD_DIR, TG_SPLIT_SIZE, app
 
 VIDEO_SUFFIXES = ("M4V", "MP4", "MOV", "FLV", "WMV", "3GP", "MPG", "WEBM", "MKV", "AVI")
 
@@ -34,6 +34,7 @@ def start_cleanup():
 
 def clean_all():
     aria2.remove_all(True)
+    app.stop()
     try:
         shutil.rmtree(DOWNLOAD_DIR)
     except FileNotFoundError:
