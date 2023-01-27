@@ -80,6 +80,7 @@ except KeyError:
     pass
 keep_alive()
 subprocess.Popen(["python3", "alive.py"])
+subprocess.run(["chmod", "+x", "aria.sh"])
 subprocess.run(["./aria.sh"], shell=True)
 
 #RECURSIVE SEARCH
