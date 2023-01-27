@@ -9,7 +9,7 @@ import subprocess
 from pyrogram import idle
 from telegram import InlineKeyboardMarkup
 from telegram.ext import CommandHandler
-from bot import IGNORE_PENDING_REQUESTS, app, bot, botStartTime, dispatcher, updater, alive
+from bot import IGNORE_PENDING_REQUESTS, app, bot, botStartTime, dispatcher, updater
 from bot.helper.ext_utils import fs_utils
 from bot.helper.ext_utils.bot_utils import get_readable_file_size, get_readable_time
 from bot.helper.telegram_helper.bot_commands import BotCommands
