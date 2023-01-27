@@ -83,7 +83,7 @@ Powered by @Bots137
 def restart(update, context):
     restart_message = sendMessage("Restarting, Please wait!", context.bot, update)
     # Save restart message ID and chat ID in order to edit it after restarting
-        with open(".restartmsg", "w") as f:
+    with open(".restartmsg", "w") as f:
         f.truncate(0)
         f.write(f"{restart_message.chat.id}\n{restart_message.message_id}\n")
     fs_utils.clean_all()
