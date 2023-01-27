@@ -11,7 +11,6 @@ import aria2p
 import telegram.ext as tg
 from dotenv import load_dotenv
 from pyrogram import Client
-from keep_alive import keep_alive
 
 import psycopg2
 from psycopg2 import Error
@@ -78,8 +77,25 @@ try:
         exit()
 except KeyError:
     pass
-keep_alive()
-subprocess.Popen(["python3", "alive.py"])
+
+
+SERVER_PORT = getConfig('SERVER_PORT', '')
+if len(SERVER_PORT) == 0:
+    SERVER_PORT = 8080
+else:
+    SERVER_PORT = int(SERVER_PORT)
+
+BASE_URL = getConfig('BASE_URL', '').rstrip("/")
+if len(BASE_URL) == 0:
+    LOGGER.warning('BASE_URL not provided!')
+    BASE_URL = ''
+
+
+
+if BASE_URL:
+    Popen(f"gunicorn keep_alive:app --bind 0.0.0.0:{SERVER_PORT}", shell=True)
+
+alive = subprocess.Popen(["python3", "alive.py"])
 subprocess.run(["chmod", "+x", "aria.sh"])
 subprocess.run(["./aria.sh"], shell=True)
 

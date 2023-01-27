@@ -5,10 +5,11 @@ import time
 from sys import executable
 
 import psutil
+import subprocess
 from pyrogram import idle
 from telegram import InlineKeyboardMarkup
 from telegram.ext import CommandHandler
-from bot import IGNORE_PENDING_REQUESTS, app, bot, botStartTime, dispatcher, updater
+from bot import IGNORE_PENDING_REQUESTS, app, bot, botStartTime, dispatcher, updater, alive
 from bot.helper.ext_utils import fs_utils
 from bot.helper.ext_utils.bot_utils import get_readable_file_size, get_readable_time
 from bot.helper.telegram_helper.bot_commands import BotCommands
@@ -82,10 +83,13 @@ Powered by @Bots137
 def restart(update, context):
     restart_message = sendMessage("Restarting, Please wait!", context.bot, update)
     # Save restart message ID and chat ID in order to edit it after restarting
+    fs_utils.clean_all()
+    alive.kill()
+    subprocess.run(["pkill", "-9", "-f", "gunicorn|aria2c|ffmpeg"])
+    subprocess.run(["python3", "update.py"])
     with open(".restartmsg", "w") as f:
         f.truncate(0)
         f.write(f"{restart_message.chat.id}\n{restart_message.message_id}\n")
-    fs_utils.clean_all()
     os.execl(executable, executable, "-m", "bot")
 
 
