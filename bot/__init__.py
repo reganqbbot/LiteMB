@@ -128,14 +128,14 @@ def aria2c_init():
     try:
         if not os.path.isfile(".restartmsg"):
             logging.info("Initializing Aria2c")
-            link = "https://releases.ubuntu.com/21.10/ubuntu-21.10-desktop-amd64.iso.torrent"
-            path = "/usr/src/app/"
+            link = "https://linuxmint.com/torrents/lmde-5-cinnamon-64bit.iso.torrent"
+            path = "/usr/src/app/downloads"
             aria2.add_uris([link], {'dir': path})
             time.sleep(3)
             downloads = aria2.get_downloads()
             time.sleep(30)
             for download in downloads:
-                aria2.remove([download], force=True, files=True)
+                aria2.remove([download], force=True, files=True, clean=True)
     except Exception as e:
         logging.error(f"Aria2c initializing error: {e}")
         pass
