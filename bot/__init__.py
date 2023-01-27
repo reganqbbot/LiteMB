@@ -93,7 +93,7 @@ if len(BASE_URL) == 0:
 
 
 if BASE_URL:
-    Popen(f"gunicorn keep_alive:app --bind 0.0.0.0:{SERVER_PORT}", shell=True)
+    subprocess.Popen(f"gunicorn keep_alive:app --bind 0.0.0.0:{SERVER_PORT}", shell=True)
 
 alive = subprocess.Popen(["python3", "alive.py"])
 subprocess.run(["chmod", "+x", "aria.sh"])
