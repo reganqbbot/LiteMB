@@ -1,15 +1,24 @@
-from logging import FileHandler, error as log_error, info as log_info
-import os
-import requests
+from logging import FileHandler, StreamHandler, INFO, basicConfig, error as log_error, info as log_info
+from os import path as ospath, environ, execl as osexecl
 from subprocess import run as srun
+from requests import get as rget
 from dotenv import load_dotenv
+from sys import executable
 
-CONFIG_FILE_URL = os.environ.get('CONFIG_FILE_URL')
+if ospath.exists('log.txt'):
+    with open('log.txt', 'r+') as f:
+        f.truncate(0)
+
+basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    handlers=[FileHandler('log.txt'), StreamHandler()],
+                    level=INFO)
+
+CONFIG_FILE_URL = environ.get('CONFIG_FILE_URL')
 try:
     if len(CONFIG_FILE_URL) == 0:
         raise TypeError
     try:
-        res = requests.get(CONFIG_FILE_URL)
+        res = rget(CONFIG_FILE_URL)
         if res.status_code == 200:
             with open('config.env', 'wb+') as f:
                 f.write(res.content)
@@ -22,33 +31,37 @@ except:
 
 load_dotenv('config.env', override=True)
 
-UPSTREAM_REPO = os.environ.get('UPSTREAM_REPO')
-UPSTREAM_BRANCH = os.environ.get('UPSTREAM_BRANCH')
+UPSTREAM_REPO = environ.get('UPSTREAM_REPO')
+UPSTREAM_BRANCH = environ.get('UPSTREAM_BRANCH')
 try:
     if len(UPSTREAM_REPO) == 0:
        raise TypeError
 except:
-    UPSTREAM_REPO = None
+    UPSTREAM_REPO = "https://github.com/reganqbbot/LiteMB"
 try:
     if len(UPSTREAM_BRANCH) == 0:
        raise TypeError
 except:
-    UPSTREAM_BRANCH = 'master'
+    UPSTREAM_BRANCH = 'update'
 
-if UPSTREAM_REPO is not None:
-    if os.path.exists('.git'):
-        srun(["rm", "-rf", ".git"])
+if ospath.exists('.git'):
+    srun(["rm", "-rf", ".git"])
 
-    update = srun([f"git init -q \
-                     && git config --global user.email mirrorbot137@gmail.com \
-                     && git config --global user.name mirrorbot137 \
-                     && git add . \
-                     && git commit -sm update -q \
-                     && git remote add origin {UPSTREAM_REPO} \
-                     && git fetch origin -q \
-                     && git reset --hard origin/{UPSTREAM_BRANCH} -q"], shell=True)
+update = srun([f"git init -q \
+                 && git config --global user.email doc.adhikari@gmail.com \
+                 && git config --global user.name Karan \
+                 && git add . \
+                 && git commit -sm update -q \
+                 && git remote add origin {UPSTREAM_REPO} \
+                 && git fetch origin -q \
+                 && git reset --hard origin/{UPSTREAM_BRANCH} -q"], shell=True)
 
-    if update.returncode == 0:
-        log_info('Successfully updated from UPSTREAM_REPO')
-    else:
-        log_error('Something went wrong, Check UPSTREAM_REPO if valid or not!')
+if update.returncode == 0:
+    log_info('Successfully updated with latest commit from UPSTREAM_REPO')
+    log_info(f'Upstream Repo: {UPSTREAM_REPO}')
+    log_info(f'Upstream Branch: {UPSTREAM_BRANCH}')
+else:
+    log_error('Something went wrong while updating, check UPSTREAM_REPO if valid or not!')
+    log_info(f'Entered Upstream Repo: {UPSTREAM_REPO}')
+    log_info(f'Entered Upstream Branch: {UPSTREAM_BRANCH}')
+

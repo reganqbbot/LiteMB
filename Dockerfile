@@ -1,15 +1,16 @@
-FROM harshpreets63/random:simple
+FROM reganqbbot/litemb:latest
 
 WORKDIR /usr/src/app
+RUN chmod 777 /usr/src/app
+
+COPY requirements.txt .
+RUN pip3 install --no-cache-dir -r requirements.txt
+RUN playwright install chromium
+RUN playwright install-deps
+RUN apt-get update && apt-get upgrade -y
+RUN apt -qq update --fix-missing && \
+    apt -qq install -y mediainfo
+
 COPY . .
 
-RUN set -ex \
-    && chmod 777 /usr/src/app \ 
-    && cp .netrc /root/.netrc \
-    && chmod 600 /root/.netrc \
-    && cp extract pextract /usr/local/bin \
-    && chmod +x aria.sh /usr/local/bin/extract /usr/local/bin/pextract
-
-RUN pip3 install --no-cache-dir --upgrade -r requirements.txt
-
-CMD ["bash", "start"]
+CMD ["bash", "start.sh"]
