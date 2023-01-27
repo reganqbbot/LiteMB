@@ -1,7 +1,9 @@
 from flask import Flask
 from threading import Thread
+from aria2p import API as ariaAPI, Client as ariaClient
 
 app = Flask('')
+aria2 = ariaAPI(ariaClient(host="http://localhost", port=6800, secret=""))
 
 @app.route('/')
 def home():
