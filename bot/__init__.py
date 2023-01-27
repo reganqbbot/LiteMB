@@ -11,7 +11,6 @@ import aria2p
 import telegram.ext as tg
 from dotenv import load_dotenv
 from pyrogram import Client
-# from keep_alive import keep_alive
 
 import psycopg2
 from psycopg2 import Error
