@@ -12,6 +12,7 @@ google-api-python-client
 google-auth-httplib2
 google-auth-oauthlib==0.4.6
 js2py
+gunicorn
 git+https://github.com/zevtyardt/lk21.git
 lxml
 megasdkrestclient
