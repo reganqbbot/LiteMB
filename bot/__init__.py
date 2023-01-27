@@ -79,13 +79,13 @@ except KeyError:
     pass
 
 
-SERVER_PORT = getConfig('SERVER_PORT', '')
+SERVER_PORT = getConfig('SERVER_PORT')
 if len(SERVER_PORT) == 0:
     SERVER_PORT = 8080
 else:
     SERVER_PORT = int(SERVER_PORT)
 
-BASE_URL = getConfig('BASE_URL', '').rstrip("/")
+BASE_URL = getConfig('BASE_URL').rstrip("/")
 if len(BASE_URL) == 0:
     LOGGER.warning('BASE_URL not provided!')
     BASE_URL = ''
